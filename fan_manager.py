@@ -2,7 +2,7 @@ import os
 import logging
 import typing
 from time import sleep
-# import RPi.GPIO as GPIO
+import OPi.GPIO as GPIO
 
 
 FAN_PIN = int(os.getenv('FAN_PIN', '18'))
@@ -26,21 +26,22 @@ class FanManager:
                     f', LOG_LEVEL={LOG_LEVEL}, LOG_FORMAT="{LOG_FORMAT}"')
 
     @staticmethod
-    def setup():
-        # GPIO.setmode(GPIO.BCM)
-        # GPIO.setup(pin, GPIO.OUT)
-        # GPIO.setwarnings(False)
+    def setup(pinout: typing.Dict[int, int]):
+        GPIO.setmode(GPIO.BCM)
+        for pin, mode in pinout.items():
+            GPIO.setup(pin, mode)
+        GPIO.setwarnings(False)
         logger.info('Setup')
 
     @staticmethod
     def cleanup():
-        # GPIO.cleanup()
+        GPIO.cleanup()
         logger.info('Cleanup')
 
     @staticmethod
     def set_pin(pin: int, state: bool):
-        # GPIO.output(pin, mode)
-        pass
+        GPIO.output(pin, state)
+        logger.debug(f'Pin #{pin} switched to {state}')
 
     @staticmethod
     def get_cpu_temperature() -> float:
@@ -76,7 +77,7 @@ class FanManager:
 if __name__ == '__main__':
     try:
         logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
-        FanManager.setup()
+        FanManager.setup({FAN_PIN: GPIO.OUT})
         FanManager(FAN_PIN, (FAN_ENABLE_THRESHOLD, FAN_DISABLE_THRESHOLD)).control_forever(SLEEP_DURATION_SEC)
     except KeyboardInterrupt:
         FanManager.cleanup()
