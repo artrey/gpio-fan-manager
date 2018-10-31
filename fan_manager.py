@@ -5,7 +5,7 @@ from time import sleep
 import OPi.GPIO as GPIO
 
 
-FAN_PIN = int(os.getenv('FAN_PIN', '18'))
+FAN_PIN = os.getenv('FAN_PIN', 'PC5')
 FAN_ENABLE_THRESHOLD = float(os.getenv('FAN_ENABLE_THRESHOLD', '40'))
 FAN_DISABLE_THRESHOLD = float(os.getenv('FAN_DISABLE_THRESHOLD', '30'))
 SLEEP_DURATION_SEC = int(os.getenv('SLEEP_DURATION_SEC', '10'))
@@ -17,7 +17,7 @@ logger = logging.getLogger('FanManager')
 
 
 class FanManager:
-    def __init__(self, pin: int, thresholds: typing.Tuple[float, float]):
+    def __init__(self, pin: str, thresholds: typing.Tuple[float, float]):
         self.pin = pin
         self.threshold_enable, self.threshold_disable = thresholds
         self.enabled = False
@@ -26,10 +26,11 @@ class FanManager:
                     f', LOG_LEVEL={LOG_LEVEL}, LOG_FORMAT="{LOG_FORMAT}"')
 
     @staticmethod
-    def setup(pinout: typing.Dict[int, int]):
-        GPIO.setmode(GPIO.BCM)
+    def setup(pinout: typing.Dict[str, int]):
+        logger.debug('Setting up the SUNXI mode')
+        GPIO.setmode(GPIO.SUNXI)
         for pin, mode in pinout.items():
-            GPIO.setup(pin, mode)
+            GPIO.setup(pin, mode, initial=False)
         GPIO.setwarnings(False)
         logger.info('Setup')
 
@@ -39,7 +40,7 @@ class FanManager:
         logger.info('Cleanup')
 
     @staticmethod
-    def set_pin(pin: int, state: bool):
+    def set_pin(pin: str, state: bool):
         GPIO.output(pin, state)
         logger.debug(f'Pin #{pin} switched to {state}')
 
