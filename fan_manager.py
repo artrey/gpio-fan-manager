@@ -25,34 +25,31 @@ class FanManager:
                     f', FAN_DISABLE_THRESHOLD={FAN_DISABLE_THRESHOLD}, SLEEP_DURATION_SEC={SLEEP_DURATION_SEC}'
                     f', LOG_LEVEL={LOG_LEVEL}, LOG_FORMAT="{LOG_FORMAT}"')
 
-    @staticmethod
-    def setup(pinout: typing.Dict[str, int]):
+    def __enter__(self):
+        self.setup()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.cleanup()
+
+    def setup(self):
         logger.debug('Setting up the SUNXI mode')
         GPIO.setmode(GPIO.SUNXI)
-        for pin, mode in pinout.items():
-            GPIO.setup(pin, mode, initial=False)
+        GPIO.setup(self.pin, GPIO.OUT, initial=False)
         GPIO.setwarnings(False)
         logger.info('Setup')
 
-    @staticmethod
-    def cleanup():
+    def cleanup(self):
+        self.set_pin(False)
         GPIO.cleanup()
         logger.info('Cleanup')
 
-    @staticmethod
-    def set_pin(pin: str, state: bool):
-        GPIO.output(pin, state)
-        logger.debug(f'Pin #{pin} switched to {state}')
-
-    @staticmethod
-    def get_cpu_temperature() -> float:
-        with open('/sys/devices/virtual/thermal/thermal_zone0/temp', 'r') as fd:
-            temp = float(fd.read()) / 1000
-            logger.debug(f'CPU temp = {temp}')
-            return temp
+    def set_pin(self, state: bool):
+        GPIO.output(self.pin, state)
+        logger.debug(f'Pin #{self.pin} switched to {state}')
 
     def fan_switch(self, state: bool):
-        self.set_pin(self.pin, state)
+        self.set_pin(state)
         self.enabled = state
         logger.info(f'Fan switched to {state}')
 
@@ -74,11 +71,16 @@ class FanManager:
             finally:
                 sleep(sleep_duration_sec)
 
+    @staticmethod
+    def get_cpu_temperature() -> float:
+        with open('/sys/devices/virtual/thermal/thermal_zone0/temp', 'r') as fd:
+            temp = float(fd.read()) / 1000
+            logger.debug(f'CPU temp = {temp}')
+            return temp
+
 
 if __name__ == '__main__':
-    try:
-        logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
-        FanManager.setup({FAN_PIN: GPIO.OUT})
-        FanManager(FAN_PIN, (FAN_ENABLE_THRESHOLD, FAN_DISABLE_THRESHOLD)).control_forever(SLEEP_DURATION_SEC)
-    except KeyboardInterrupt:
-        FanManager.cleanup()
+    logging.basicConfig(format=LOG_FORMAT, level=LOG_LEVEL)
+    with FanManager(FAN_PIN, (FAN_ENABLE_THRESHOLD, FAN_DISABLE_THRESHOLD)) as fan_manager:
+        print(fan_manager)
+        fan_manager.control_forever(SLEEP_DURATION_SEC)
