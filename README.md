@@ -9,12 +9,18 @@ You need 4 components:
 * Transistor 2N5551 or analog
 * Some wires...
 
-Scheme:
+Scheme (see image):
 
 1. Connect 5V pin on board to 5V pin on fan
-2. Connect GND pin on board to right pin of transistor
+2. Connect GND pin on board to left pin of transistor
 3. Connect GPIO pin on board (e.g. 'PC5' in SUNXI pinout) to middle pin of transistor
-4. Connect left pin on transistor to 0V pin on fan
+4. Connect right pin on transistor to 0V pin on fan
+
+![scheme](scheme.png)
+
+##### SUNXI pinout
+
+![pinout](sunxi-pinout.png)
 
 ### Software
 
