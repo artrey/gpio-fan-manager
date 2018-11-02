@@ -30,4 +30,3 @@ python fan_manager.py
 ```bash
 docker build -t artrey/gpio-fan-manager .
 ```
-```
