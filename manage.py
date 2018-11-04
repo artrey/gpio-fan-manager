@@ -62,10 +62,16 @@ def main():
     config_path = os.getenv('CONFIG_PATH', 'config.yml')
     config = load_config(config_path)
 
-    logging.basicConfig(format=config['LOG_FORMAT'], level=config['LOG_LEVEL'], filename=config['LOG_FILE'])
+    log_file = config['LOG_FILE']
+    if log_file:
+        log_dir = os.path.dirname(log_file)
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+    logging.basicConfig(format=config['LOG_FORMAT'], level=config['LOG_LEVEL'], filename=log_file)
     logger = logging.getLogger('Manage')
 
-    logger.debug(f'Initialized logger: LOG_FILE={config["LOG_FILE"]},'
+    logger.debug(f'Initialized logger: LOG_FILE={log_file},'
                  f' LOG_LEVEL={config["LOG_LEVEL"]},'
                  f' LOG_FORMAT="{config["LOG_FORMAT"]}"')
 

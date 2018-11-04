@@ -52,7 +52,7 @@ To use this service in docker need grant it privileged mode. Also need pass the 
 Example of docker command:
 
 ```bash
-docker run --restart=always --privileged \
+docker run -d --restart=always --privileged --name=fan-manager \
     -v /sys/class/gpio:/sys/class/gpio \
     -v /sys/devices/virtual/thermal/thermal_zone0/temp:/sys/devices/virtual/thermal/thermal_zone0/temp:ro \
     -v $PWD/config.yml:/opt/app/config.yml:ro \
