@@ -13,6 +13,7 @@ from fan_manager import FanManager, Schedule, FanPolicy
 
 
 DEFAULTS = {
+    'LOG_FILE': None,
     'LOG_FORMAT': '%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s',
     'LOG_LEVEL': logging.INFO,
     'FAN_PIN': 'PC5',
@@ -61,10 +62,11 @@ def main():
     config_path = os.getenv('CONFIG_PATH', 'config.yml')
     config = load_config(config_path)
 
-    logging.basicConfig(format=config['LOG_FORMAT'], level=config['LOG_LEVEL'])
+    logging.basicConfig(format=config['LOG_FORMAT'], level=config['LOG_LEVEL'], filename=config['LOG_FILE'])
     logger = logging.getLogger('Manage')
 
-    logger.debug(f'Initialized logger: LOG_LEVEL={config["LOG_LEVEL"]},'
+    logger.debug(f'Initialized logger: LOG_FILE={config["LOG_FILE"]},'
+                 f' LOG_LEVEL={config["LOG_LEVEL"]},'
                  f' LOG_FORMAT="{config["LOG_FORMAT"]}"')
 
     logger.info(f'Parameters: FAN_PIN={config["FAN_PIN"]},'

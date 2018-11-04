@@ -49,6 +49,7 @@ Config file is the .yaml/.yml file.
 Example of config file:
 
 ```yaml
+LOG_FILE: ''  # path to log file or empty to log to console
 LOG_LEVEL: 20  # python logging level
 LOG_FORMAT: '%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s'  # python logging level
 

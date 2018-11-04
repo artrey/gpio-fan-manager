@@ -1,3 +1,4 @@
+LOG_FILE: ''
 LOG_LEVEL: 10
 LOG_FORMAT: '%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s'
 
