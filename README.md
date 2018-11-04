@@ -44,7 +44,7 @@ Structure of config file see below.
 
 ### Structure of config file
 
-Config file is the .yaml/.yml file.
+Config file is the .yaml/.yml file. Time format is ```<HH>h<MM>m<SS>s```. Hours in 24h-format.
 
 Example of config file:
 
@@ -64,11 +64,11 @@ SCHEDULE:  # schedule of manager
     THRESHOLD_ENABLE: 40  # temperature when enable fan
     THRESHOLD_DISABLE: 30  # temperature when disable fan
   SPECIAL_POLICIES:  # list of policies for specify time
-    - TIME_START: 22h30m
+    - TIME_START: 22h30m  # night hours
       TIME_FINISH: 2h
-      THRESHOLD_ENABLE: 45
-      THRESHOLD_DISABLE: 35
-    - TIME_START: 2h
+      THRESHOLD_ENABLE: 55
+      THRESHOLD_DISABLE: 45
+    - TIME_START: 2h  # any specific hours
       TIME_FINISH: 13h
       THRESHOLD_ENABLE: 50
       THRESHOLD_DISABLE: 40

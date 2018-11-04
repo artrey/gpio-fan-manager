@@ -24,9 +24,13 @@ class Schedule:
         self.special_policies = special_policies
 
     def get_policy(self, time: datetime.time) -> FanPolicy:
-        return next(filter(lambda x: x.time_start < time < x.time_finish,
-                           self.special_policies),
-                    self.base_policy)
+        def filt(p: FanPolicy):
+            if p.time_start > p.time_finish:
+                return p.time_start < time < datetime.time(23, 59, 59, 1000) \
+                       or datetime.time(0) < time < p.time_finish
+            return p.time_start < time < p.time_finish
+
+        return next(filter(filt, self.special_policies), self.base_policy)
 
     def current_policy(self, tz: pytz.timezone) -> FanPolicy:
         return self.get_policy(datetime.datetime.now(tz=tz).time())
