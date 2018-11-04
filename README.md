@@ -47,7 +47,7 @@ To use this service in docker need grant it privileged mode. Also need pass the 
 * /sys/class/gpio (to control gpio)
 * /sys/devices/virtual/thermal/thermal_zone0/temp:ro (to get the temperature)
 * /opt/app/config.yml:ro (config file)
-* optional: <volume with log file>
+* optional: `volume with log file`
 
 Example of docker command:
 
@@ -56,9 +56,11 @@ docker run -d --restart=always --privileged --name=fan-manager \
     -v /sys/class/gpio:/sys/class/gpio \
     -v /sys/devices/virtual/thermal/thermal_zone0/temp:/sys/devices/virtual/thermal/thermal_zone0/temp:ro \
     -v $PWD/config.yml:/opt/app/config.yml:ro \
-    -v $PWD/manager.log:/var/log/manager.log \
+    -v $PWD/logs:/opt/app/logs \
     artrey/gpio-fan-manager-arm64
 ```
+
+```/opt/app``` is root folder of service.
 
 Structure of config file see below.
 
@@ -69,7 +71,7 @@ Config file is the .yaml/.yml file. Time format is ```<HH>h<MM>m<SS>s```. Hours 
 Example of config file:
 
 ```yaml
-LOG_FILE: ''  # path to log file or empty to log to console
+LOG_FILE: 'logs/manage.log'  # path to log file or empty to log to console
 LOG_LEVEL: 20  # python logging level
 LOG_FORMAT: '%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s'  # python logging level
 
