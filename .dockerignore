@@ -1,0 +1,11 @@
+# Ignore everything
+**
+
+# Allowed
+!fan_manager/**
+!manage.py
+!requirements.txt
+
+# Override allowed
+fan_manager/.idea/**
+fan_manager/__pycache__/**

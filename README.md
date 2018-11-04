@@ -39,7 +39,25 @@ Structure of config file see below.
 ### Build image
 
 ```bash
-docker build -t artrey/gpio-fan-manager .
+docker build -t artrey/gpio-fan-manager-arm64 .
+```
+
+To use this service in docker need grant it privileged mode. Also need pass the volumes:
+
+* /sys/class/gpio (to control gpio)
+* /sys/devices/virtual/thermal/thermal_zone0/temp:ro (to get the temperature)
+* /opt/app/config.yml:ro (config file)
+* optional: <volume with log file>
+
+Example of docker command:
+
+```bash
+docker run --restart=always --privileged \
+    -v /sys/class/gpio:/sys/class/gpio \
+    -v /sys/devices/virtual/thermal/thermal_zone0/temp:/sys/devices/virtual/thermal/thermal_zone0/temp:ro \
+    -v $PWD/config.yml:/opt/app/config.yml:ro \
+    -v $PWD/manager.log:/var/log/manager.log \
+    artrey/gpio-fan-manager-arm64
 ```
 
 Structure of config file see below.
