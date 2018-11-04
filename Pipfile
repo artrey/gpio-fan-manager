@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 opi-gpio = "*"
-python-decouple = "*"
+pyyaml = "*"
+pytz = "*"
 
 [dev-packages]
 
