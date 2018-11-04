@@ -29,6 +29,8 @@ pip install requirements.txt
 python manage.py
 ```
 
+Script require access to control of gpio (maybe need sudo).
+
 Script use the config file (default: config.yaml in same folder).
 Set the env variable CONFIG_PATH to override file path.
 
