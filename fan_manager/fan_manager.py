@@ -18,11 +18,13 @@ class FanManager:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def __enter__(self):
-        # self.setup()
+        self.setup()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.cleanup()
+        if type(exc_val) is KeyboardInterrupt:
+            return True
 
     def setup(self):
         self.logger.debug('Setting up the SUNXI mode')
