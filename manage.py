@@ -80,7 +80,7 @@ def main():
                 f' TIMEZONE={config["TIMEZONE"]}')
 
     base_policy = policy_from_dict(config['SCHEDULE']['BASE_POLICY'])
-    special_policies = list(map(policy_from_dict, config['SCHEDULE']['SPECIAL_POLICIES']))
+    special_policies = list(map(policy_from_dict, config['SCHEDULE'].get('SPECIAL_POLICIES', [])))
 
     schedule = Schedule(base_policy, special_policies)
     logger.info(f'Actual schedule: {schedule}')

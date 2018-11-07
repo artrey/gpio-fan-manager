@@ -1,6 +1,5 @@
-LOG_FILE: ''
 LOG_LEVEL: 10
-LOG_FORMAT: '%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s'
+LOG_FORMAT: "%(asctime)-15s | %(name)-10s | %(levelname)-8s | %(message)s"
 
 FAN_PIN: PC5
 
@@ -12,12 +11,3 @@ SCHEDULE:
   BASE_POLICY:
     THRESHOLD_ENABLE: 40
     THRESHOLD_DISABLE: 30
-  SPECIAL_POLICIES:
-    - TIME_START: 22h30m
-      TIME_FINISH: 2h
-      THRESHOLD_ENABLE: 45
-      THRESHOLD_DISABLE: 35
-    - TIME_START: 2h
-      TIME_FINISH: 13h
-      THRESHOLD_ENABLE: 50
-      THRESHOLD_DISABLE: 40
