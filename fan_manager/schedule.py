@@ -19,16 +19,16 @@ class FanPolicy:
 
 
 class Schedule:
-    def __init__(self, base_polisy: FanPolicy, special_policies: List[FanPolicy]):
-        self.base_policy = base_polisy
+    def __init__(self, base_policy: FanPolicy, special_policies: List[FanPolicy]):
+        self.base_policy = base_policy
         self.special_policies = special_policies
 
     def get_policy(self, time: datetime.time) -> FanPolicy:
         def filt(p: FanPolicy):
             if p.time_start > p.time_finish:
-                return p.time_start < time < datetime.time(23, 59, 59, 1000) \
-                       or datetime.time(0) < time < p.time_finish
-            return p.time_start < time < p.time_finish
+                return p.time_start <= time <= datetime.time(23, 59, 59, 999999) \
+                       or datetime.time(0) <= time <= p.time_finish
+            return p.time_start <= time <= p.time_finish
 
         return next(filter(filt, self.special_policies), self.base_policy)
 

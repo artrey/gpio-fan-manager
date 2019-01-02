@@ -53,6 +53,10 @@ def policy_from_dict(data: dict) -> FanPolicy:
             match = re.search(pattern, time_str)
             time_args[arg] = int(match.group(1)) if match else 0
 
+        m, time_args['second'] = divmod(time_args.get('second', 0), 60)
+        h, time_args['minute'] = divmod(time_args.get('minute', 0) + m, 60)
+        _, time_args['hour'] = divmod(time_args.get('hour', 0) + h, 24)
+
         kwargs[param] = datetime.time(**time_args)
 
     return FanPolicy(**kwargs)
